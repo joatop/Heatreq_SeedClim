@@ -1,0 +1,51 @@
+
+    model{
+    
+    ## Likelihood
+    for (i in 1:n) {
+    # binomial errors
+    diff[i] ~ dbin(p[i], N[i])
+    
+    # linear predictor 
+    logit(p[i]) <- alpha.diff[HeatGr[i]] + alpha.Site[siteID[i]] + eps[i]       
+    
+    # overdispersion
+    eps[i] ~ dnorm(0,tau) # Note that precision tau = 1/sig?
+    } 
+    
+    ## priors
+    for (i in 1:n.HeatGr) {
+    alpha.diff[i] ~ dnorm(0,0.001)     
+    }
+
+    for (j in 1:n.Site) {
+    alpha.Site[j] ~ dnorm(0,tau.alpha.Site)     
+    }
+    tau.alpha.Site ~ dunif(0,100)
+    sigma.alpha.Site <- sqrt(1/tau.alpha.Site)
+    
+    tau ~ dunif(0,1000000)
+    sigma <- sqrt(1/tau)
+    
+    
+    
+    # Assess modelfit using pearson residuals
+    for (i in 1:n) {
+    # Pearson residuals
+    Presi[i] <- (diff[i]-N[i]*p[i]) / sqrt(N[i]*p[i]*(1-p[i])) 
+    # generate replicate dataset & compute Pearson residuals
+    diff.new[i] ~ dbin(p[i],N[i])
+    Presi.new[i] <- (diff.new[i]-N[i]*p[i]) / sqrt(N[i]*p[i]*(1-p[i])) 
+    # squared Pearson residuals
+    sq[i] <- pow(Presi[i],2)
+    sq.new[i] <- pow(Presi.new[i],2)   
+    }
+    
+    fit <- sum(sq[])                                    # Sumofsquaredresidualsforactualdataset
+    fit.new <- sum(sq.new[])                            #Sumofsquaredresidualsfornewdataset
+    test <- step(fit.new-fit)                           #Testwhethernewdatasetmoreextreme
+    bpvalue <- mean(test)                               # Bayesianp-value
+    }
+
+    
+    
