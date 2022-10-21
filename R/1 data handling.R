@@ -31,8 +31,8 @@ comdat <- tbl(con, "turf_community") %>%
   select(siteID, blockID, turfID, latitude, longitude, annual_precipitation_gridded, summer_temperature_gridded, year,
          TTtreat, species, species_name, family, cover, total_vascular, total_bryophytes, total_lichen, vegetation_height, moss_height) %>%
   collect() %>% 
-  filter(TTtreat %in% list("TTC","TT1","TT2")) %>%
-  filter(year %in% list(2009,2019))
+  filter(TTtreat %in% list("TTC","TT1","TT2")) #%>%
+#  filter(year %in% list(2009,2019))
 
 # take out unidentified species
 comdat <- filter(comdat, !(species %in% c("NID.seedling", "NID.gram","Åkerplante","NID.herb")))
@@ -75,7 +75,9 @@ unique(comind[!is.na(comind$Heat_requirement),'species_name'])
 # fix species name issues
 ind_swe <- ind_swe %>% 
   mutate(species=str_replace(species,"Aconitum lycoctonum", "Aconitum septentrionale")) %>% 
-  mutate(species=str_replace(species,"Carex simpliciuscula", "Kobresia simpliciuscula")) 
+  mutate(species=str_replace(species,"Carex simpliciuscula", "Kobresia simpliciuscula")) %>%
+  mutate(species=str_replace(species,"Cherleria biflora", "Minuartia biflora")) 
+
 comdat <- comdat %>% 
   mutate(species_name=str_replace(species_name,"Arctous alpinus", "Arctous alpina")) %>%
   mutate(species_name=str_replace(species_name,"Hieracium pilosella", "Pilosella officinarum")) %>%
@@ -99,7 +101,7 @@ unique(comind[is.na(comind$Heat_requirement),'species_name'])
 unique(comind[!is.na(comind$Heat_requirement),'species_name'])
 
 summary(comind)
-dim(comind) # 261 of 3934 observations are without indicator values for heat requirement
+dim(comind) # 261 of 3934 (for 2009 & 2019) and 1380 of 20854 (for all years) observations are without indicator values for heat requirement
 comind <- comind[!is.na(comind$Heat_requirement),]
 # replace space with dot in turfID
 comind <- comind %>%
@@ -123,7 +125,7 @@ comind <- comind %>%
 sp.alp <- unique(
   comind %>% 
     filter(alt.orig %in% list("alpine")) %>%
-    filter(!(year %in% list(2019) & TTtreat %in% list("TT2"))) %>%
+    filter( (year %in% list(2009) & TTtreat %in% list("TTC","TT1") ) ) %>%
     select(species_name)
 )[,1]
 # adding a variable indicating whether or not a species is natural in the alpine
@@ -137,7 +139,7 @@ comind <- comind %>%
 sp.subalp <- unique(
   comind %>% 
     filter(alt.orig %in% list("alpine","sub-alpine")) %>%
-    filter(!(year %in% list(2019) & TTtreat %in% list("TT2"))) %>%
+    filter( (year %in% list(2009) & TTtreat %in% list("TTC","TT1") ) ) %>%
     select(species_name)
 )[,1]
 # adding a variable indicating whether or not a species is natural in the sub-alpine or alpine
@@ -153,5 +155,12 @@ comind %>%
   filter(TTtreat %in% list("TTC")) %>%
   filter(Heat_requirement>6) %>%
   select(species_name,cover,year,Heat_requirement)
-  
+
+# can't distinguish between Anthoxanthum odoratum (high Hr) and nipponicum (low Hr), remove
+
+comind[comind$species_name=="Tofieldia calyculata",]
+# 1 observation of a species with Hr=13 in a control in Låvisdalen -> not really reliable, remove
+comind <- comind %>%
+  filter( !(species_name %in% list("Tofieldia calyculata", "Anthoxanthum odoratum")) )
+
 # hohoho
