@@ -34,27 +34,27 @@ diff.cumsum.sp.subalp$Hrfyr <- paste(diff.cumsum.sp.subalp$Hrf,diff.cumsum.sp.su
 
 
 #### regressions ####
-mod.diff_TT2_alpine <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TT2_alpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TT2' & 
                                                          diff.cumsum$alt.orig=='alpine',])
 
-mod.diff_TTC_alpine <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TTC_alpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TTC' & 
                                                          diff.cumsum$alt.orig=='alpine',])
 
-mod.diff_TT2_alpine.sp.alp <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TT2_alpine.sp.alp <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum.sp.alp[diff.cumsum.sp.alp$TTtreat=='TT2' & 
                                                                 diff.cumsum.sp.alp$alt.orig=='alpine',])
 
-mod.diff_TT2_subalpine <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TT2_subalpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TT2' & 
                                                          diff.cumsum$alt.orig=='sub-alpine',])
 
-mod.diff_TTC_subalpine <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TTC_subalpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TTC' & 
                                                          diff.cumsum$alt.orig=='sub-alpine',])
 
-mod.diff_TT2_subalpine.sp.subalp <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|siteID), family='beta_family',
+mod.diff_TT2_subalpine.sp.subalp <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                            data = diff.cumsum.sp.subalp[diff.cumsum.sp.subalp$TTtreat=='TT2' & 
                                                                           diff.cumsum.sp.subalp$alt.orig=='sub-alpine',])
 
@@ -63,7 +63,7 @@ mod.diff_TT2_subalpine.sp.subalp <- glmmTMB(diff.cumsum2~Hrf*as.factor(year)+(1|
 ## alpine
 pred.diff_TT2_alpine <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2011,2012,2013,2015,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~Hrf*as.factor(year),data = pred.diff_TT2_alpine)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TT2_alpine)
 pred.diff_TT2_alpine$fit <- X %*% fixef(mod.diff_TT2_alpine)[['cond']]
 pred.diff_TT2_alpine$SE <- sqrt(diag(X %*% vcov(mod.diff_TT2_alpine)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
@@ -77,7 +77,7 @@ pred.diff_TT2_alpine
 
 pred.diff_TTC_alpine <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2010,2011,2012,2013,2015,2016,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~ Hrf*as.factor(year),data = pred.diff_TTC_alpine)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TTC_alpine)
 pred.diff_TTC_alpine$fit <- X %*% fixef(mod.diff_TTC_alpine)[['cond']]
 pred.diff_TTC_alpine$SE <- sqrt(diag(X %*% vcov(mod.diff_TTC_alpine)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
@@ -91,7 +91,7 @@ pred.diff_TTC_alpine
 
 pred.diff_TT2_alpine.sp.alp <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2011,2012,2013,2015,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~ Hrf*as.factor(year),data = pred.diff_TT2_alpine.sp.alp)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TT2_alpine.sp.alp)
 pred.diff_TT2_alpine.sp.alp$fit <- X %*% fixef(mod.diff_TT2_alpine.sp.alp)[['cond']]
 pred.diff_TT2_alpine.sp.alp$SE <- sqrt(diag(X %*% vcov(mod.diff_TT2_alpine.sp.alp)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
@@ -106,7 +106,7 @@ pred.diff_TT2_alpine.sp.alp
 ## sub-alpine
 pred.diff_TT2_subalpine <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2011,2012,2013,2015,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~ Hrf*as.factor(year),data = pred.diff_TT2_subalpine)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TT2_subalpine)
 pred.diff_TT2_subalpine$fit <- X %*% fixef(mod.diff_TT2_subalpine)[['cond']]
 pred.diff_TT2_subalpine$SE <- sqrt(diag(X %*% vcov(mod.diff_TT2_subalpine)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
@@ -120,7 +120,7 @@ pred.diff_TT2_subalpine
 
 pred.diff_TTC_subalpine <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2011,2012,2013,2015,2016,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~ Hrf*as.factor(year),data = pred.diff_TTC_subalpine)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TTC_subalpine)
 pred.diff_TTC_subalpine$fit <- X %*% fixef(mod.diff_TTC_subalpine)[['cond']]
 pred.diff_TTC_subalpine$SE <- sqrt(diag(X %*% vcov(mod.diff_TTC_subalpine)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
@@ -134,7 +134,7 @@ pred.diff_TTC_subalpine
 
 pred.diff_TT2_subalpine.sp.subalp <- expand.grid(Hrf=as.factor(c(1:10)),year=as.factor(c(2011,2012,2013,2015,2017,2019)))  
 # you need to define the fixed effects part of the mod.cumsumsel as it was specified above
-X <- model.matrix(~ Hrf*as.factor(year),data = pred.diff_TT2_subalpine.sp.subalp)
+X <- model.matrix(~0+Hrf*as.factor(year),data = pred.diff_TT2_subalpine.sp.subalp)
 pred.diff_TT2_subalpine.sp.subalp$fit <- X %*% fixef(mod.diff_TT2_subalpine.sp.subalp)[['cond']]
 pred.diff_TT2_subalpine.sp.subalp$SE <- sqrt(diag(X %*% vcov(mod.diff_TT2_subalpine.sp.subalp)[['cond']] %*% t(X)))
 # SE for intercept is 0 here
