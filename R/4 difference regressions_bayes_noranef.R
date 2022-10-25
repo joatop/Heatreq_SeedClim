@@ -12,7 +12,7 @@ cat("
     a2[i] <- (1-mu[i])*phi
     
     # linear predictor 
-    logit(mu[i]) <- group.mean[Hrf[i],fyear[i]] + alpha.Site[siteID[i]]
+    logit(mu[i]) <- group.mean[Hrf[i],fyear[i]] # + alpha.Site[siteID[i]]
     }
     
     #priors
@@ -23,12 +23,12 @@ cat("
       group.mean[j,k] ~ dnorm(0,0.001)
       }}
 
-    for (l in 1:n.Site) {
-    alpha.Site[l] ~ dnorm(0,tau.alpha.Site)     
-    }
-    
-    tau.alpha.Site ~ dunif(0,100)
-    sigma.alpha.Site <- sqrt(1/tau.alpha.Site)
+#    for (l in 1:n.Site) {
+#    alpha.Site[l] ~ dnorm(0,tau.alpha.Site)     
+#    }
+#    
+#    tau.alpha.Site ~ dunif(0,100)
+#    sigma.alpha.Site <- sqrt(1/tau.alpha.Site)
     
     }
 
@@ -44,10 +44,10 @@ sink()
 
 # Specify a function to generate inital values for the parameters
 inits.fn <- function() list(group.mean = matrix(rnorm(length(unique(diff.cumsum[diff.cumsum$TTtreat=='TT2' & diff.cumsum$alt.orig=='alpine','Hrfyr'])),
-                                               mean(diff.cumsum$diff.cumsum2),2),
-                                               nrow=10,ncol=6),
-                            alpha.Site = rnorm(4,1,2),
-                            tau.alpha.Site = 1,
+                                                      mean(diff.cumsum$diff.cumsum2),2),
+                                                nrow=10,ncol=6),
+#                            alpha.Site = rnorm(4,1,2),
+#                            tau.alpha.Site = 1,
                             phi = 1
 )
 
@@ -68,7 +68,7 @@ Data <- list( n = nrow(diff.cumsum[diff.cumsum$TTtreat=='TT2' & diff.cumsum$alt.
 # Compile the model and run the MCMC for an adaptation (burn-in) phase
 jagsModel_diff.cumsum_alpine <- jags.model(file= "input/diffreg_alp_warm.txt", data=Data, inits = inits.fn, n.chains = 3, n.adapt= 20000)
 # Specify parameters for which posterior samples are saved
-para.names <- c('group.mean','sigma.alpha.Site','phi') #
+para.names <- c('group.mean','phi') #,'sigma.alpha.Site'
 # Continue the MCMC runs with sampling
 Samples_diff.cumsum_alpine <- coda.samples(jagsModel_diff.cumsum_alpine , variable.names = para.names, n.iter = 100000)
 

@@ -1,0 +1,37 @@
+
+    model{
+    
+    #Likelihood
+    for (i in 1:n) {
+    # beta distribution
+    covdiff[i] ~ dbeta(a1[i],a2[i])
+    a1[i] <- mu[i]*phi[i]
+    a2[i] <- (1-mu[i])*phi[i]
+    
+    # linear predictors 
+    logit(mu[i]) <- group.mean[Hrf[i],fyear[i]] # + alpha.Site[siteID[i]]
+    
+    phi[i] <- alpha.phi[Hrf[i]]
+    }
+    
+    #priors
+#    phi ~ dgamma(.1,.1)
+    
+    for (j in 1:n.Hrf) {
+    alpha.phi[j] ~ dnorm(0,0.001)
+
+      for (k in 1:n.fyear) {
+      group.mean[j,k] ~ dnorm(0,0.001)
+      }}
+
+#    for (l in 1:n.Site) {
+#    alpha.Site[l] ~ dnorm(0,tau.alpha.Site)     
+#    }
+#    
+#    tau.alpha.Site ~ dunif(0,100)
+#    sigma.alpha.Site <- sqrt(1/tau.alpha.Site)
+    
+    }
+
+    
+    
