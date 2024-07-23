@@ -77,4 +77,5 @@ summary(lmer(diff~1 + (1|siteID), data=diff.cwm[diff.cwm$TTtreat=='TT2' & diff.c
 summary(lmer(diff~1 + (1|siteID), data=diff.cwm[diff.cwm$TTtreat=='TTC' & diff.cwm$alt.orig=='alpine',]))
 summary(lmer(diff~1 + (1|siteID), data=diff.cwm[diff.cwm$TTtreat=='TTC' & diff.cwm$alt.orig=='sub-alpine',]))
 
+summary(lmer(diff~0 + TTtreat + (1|siteID), data=diff.cwm[diff.cwm$alt.orig=='alpine',]))
 

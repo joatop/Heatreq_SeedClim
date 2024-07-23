@@ -42,6 +42,10 @@ mod.diff_TTC_alpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), fa
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TTC' & 
                                                          diff.cumsum$alt.orig=='alpine',])
 
+mod.diff_TT1_alpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
+                               data = diff.cumsum[diff.cumsum$TTtreat=='TT1' & 
+                                                    diff.cumsum$alt.orig=='alpine',])
+
 mod.diff_TT2_alpine.sp.alp <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum.sp.alp[diff.cumsum.sp.alp$TTtreat=='TT2' & 
                                                                 diff.cumsum.sp.alp$alt.orig=='alpine',])
@@ -53,6 +57,10 @@ mod.diff_TT2_subalpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID),
 mod.diff_TTC_subalpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                     data = diff.cumsum[diff.cumsum$TTtreat=='TTC' & 
                                                          diff.cumsum$alt.orig=='sub-alpine',])
+
+mod.diff_TT1_subalpine <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
+                                  data = diff.cumsum[diff.cumsum$TTtreat=='TT1' & 
+                                                       diff.cumsum$alt.orig=='sub-alpine',])
 
 mod.diff_TT2_subalpine.sp.subalp <- glmmTMB(diff.cumsum2~0+Hrf*as.factor(year)+(1|siteID), family='beta_family',
                                            data = diff.cumsum.sp.subalp[diff.cumsum.sp.subalp$TTtreat=='TT2' & 
@@ -171,9 +179,11 @@ abline(h=0,lty=2)
 summary(mod.diff_TT2_alpine)
 summary(mod.diff_TT2_alpine.sp.alp)
 summary(mod.diff_TTC_alpine)
+summary(mod.diff_TT1_alpine)
 
 summary(mod.diff_TT2_subalpine)
 summary(mod.diff_TT2_subalpine.sp.subalp)
 summary(mod.diff_TTC_subalpine)
+summary(mod.diff_TT1_subalpine)
 
 

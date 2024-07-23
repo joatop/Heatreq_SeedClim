@@ -38,10 +38,10 @@ comdat <- tbl(con, "turf_community") %>%
 comdat <- filter(comdat, !(species %in% c("NID.seedling", "NID.gram","Åkerplante","NID.herb")))
 
 # disconnect the database connection
-dbDisconnect()
+dbDisconnect(con)
 
 ### load the indicator data
-ind_swe <- read.table(file="C:/Users/joachim.topper/OneDrive - NINA/work/R projects/projects/økol tilst indikatorverdier/input/indicators/ind_swe.txt", sep = '\t', header=T, quote = '')
+ind_swe <- read.table(file="input/ind_swe.txt", sep = '\t', header=T, quote = '')
 summary(ind_swe)
 
 ## indicator data handling
